@@ -145,4 +145,8 @@ def get_items():
     for item in items:
         result.append(dict(item))
 
+<<<<<<< HEAD
     return jsonify(result), 200
+=======
+    return jsonify(result), 200
+>>>>>>> 381f6def5da9f70cbbb29e65632f04e87c4b6e84

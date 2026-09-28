@@ -65,4 +65,8 @@ def test_get_items():
 
     response = client.get("/api/items")
 
+<<<<<<< HEAD
     assert response.status_code == 200
+=======
+    assert response.status_code == 200
+>>>>>>> 381f6def5da9f70cbbb29e65632f04e87c4b6e84

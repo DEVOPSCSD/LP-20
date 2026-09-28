@@ -449,4 +449,8 @@ document.addEventListener(
         }
 
     }
+<<<<<<< HEAD
 );
+=======
+);
+>>>>>>> 381f6def5da9f70cbbb29e65632f04e87c4b6e84
