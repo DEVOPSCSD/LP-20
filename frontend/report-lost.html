@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report Lost Item</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🔍 Lost & Found
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="items.html">Items</a>
+        </div>
+
+    </nav>
+
+
+    <div class="form-page">
+
+        <div class="report-box">
+
+            <h1>🔴 Report Lost Item</h1>
+
+            <p>Enter the details of your lost item.</p>
+
+
+            <form id="lostForm">
+
+
+                <label>Item Name</label>
+
+                <input
+                    type="text"
+                    id="lostItemName"
+                    placeholder="Example: Mobile Phone"
+                    required
+                >
+
+
+                <label>Description</label>
+
+                <textarea
+                    id="lostDescription"
+                    placeholder="Describe the item"
+                    required
+                ></textarea>
+
+
+                <label>Location Where Lost</label>
+
+                <input
+                    type="text"
+                    id="lostLocation"
+                    placeholder="Example: College Library"
+                    required
+                >
+
+
+                <label>Date Lost</label>
+
+                <input
+                    type="date"
+                    id="lostDate"
+                    required
+                >
+
+
+                <label>Contact Information</label>
+
+                <input
+                    type="text"
+                    id="lostContact"
+                    placeholder="Phone number or email"
+                    required
+                >
+
+
+                <button type="submit" class="primary-btn">
+                    Submit Lost Report
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>

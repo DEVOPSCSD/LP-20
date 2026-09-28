@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Items - Lost & Found</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🔍 Lost & Found
+        </div>
+
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="report-lost.html">Report Lost</a>
+            <a href="report-found.html">Report Found</a>
+        </div>
+
+    </nav>
+
+
+    <div class="items-page">
+
+        <h1>Lost & Found Items</h1>
+
+
+        <div class="items-actions">
+
+            <button onclick="showLostItems()" class="primary-btn">
+                🔴 Lost Items
+            </button>
+
+            <button onclick="showFoundItems()" class="secondary-btn">
+                🟢 Found Items
+            </button>
+
+            <button onclick="showAllItems()" class="dark-btn">
+                📋 Show All
+            </button>
+
+        </div>
+
+
+        <div id="itemsContainer">
+
+            <!-- Items will be displayed by JavaScript -->
+
+        </div>
+
+    </div>
+
+
+    <script src="script.js"></script>
+
+</body>
+</html>
