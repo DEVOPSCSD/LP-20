@@ -1,49 +1,67 @@
+// ================= BACKEND URL =================
 
-/ ================= REGISTER =================
+const API_URL = "http://127.0.0.1:5000/api";
+
+
+// ================= REGISTER =================
 
 const registerForm = document.getElementById("registerForm");
 
 if (registerForm) {
 
-    registerForm.addEventListener("submit", function(event) {
+    registerForm.addEventListener("submit", async function(event) {
 
         event.preventDefault();
 
         const name = document.getElementById("registerName").value.trim();
         const email = document.getElementById("registerEmail").value.trim();
         const password = document.getElementById("registerPassword").value;
-        const confirmPassword = document.getElementById("confirmPassword").value;
+        const confirmPassword =
+            document.getElementById("confirmPassword").value;
 
         if (password !== confirmPassword) {
             alert("Passwords do not match!");
             return;
         }
 
-        let users = JSON.parse(localStorage.getItem("users")) || [];
+        try {
 
-        const userExists = users.some(function(user) {
-            return user.email === email;
-        });
+            const response = await fetch(`${API_URL}/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password
+                })
+            });
 
-        if (userExists) {
-            alert("User already exists. Please login.");
-            window.location.href = "login.html";
-            return;
+            const data = await response.json();
+
+            if (response.ok) {
+
+                alert("Registration successful! Please login.");
+
+                registerForm.reset();
+
+                window.location.href = "login.html";
+
+            } else {
+
+                alert(data.message);
+
+            }
+
+        } catch (error) {
+
+            console.error("Registration error:", error);
+
+            alert(
+                "Cannot connect to the backend. Make sure Flask is running."
+            );
         }
-
-        const user = {
-            name: name,
-            email: email,
-            password: password
-        };
-
-        users.push(user);
-
-        localStorage.setItem("users", JSON.stringify(users));
-
-        alert("Registration successful! Please login.");
-
-        window.location.href = "login.html";
 
     });
 
@@ -56,37 +74,55 @@ const loginForm = document.getElementById("loginForm");
 
 if (loginForm) {
 
-    loginForm.addEventListener("submit", function(event) {
+    loginForm.addEventListener("submit", async function(event) {
 
         event.preventDefault();
 
-        const email = document.getElementById("loginEmail").value.trim();
-        const password = document.getElementById("loginPassword").value;
+        const email =
+            document.getElementById("loginEmail").value.trim();
 
-        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const password =
+            document.getElementById("loginPassword").value;
 
-        const user = users.find(function(user) {
+        try {
 
-            return user.email === email &&
-                   user.password === password;
+            const response = await fetch(`${API_URL}/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
 
-        });
+            const data = await response.json();
 
-        if (user) {
+            if (response.ok) {
 
-            localStorage.setItem(
-                "currentUser",
-                JSON.stringify(user)
+                localStorage.setItem(
+                    "currentUser",
+                    JSON.stringify(data.user)
+                );
+
+                alert("Login successful!");
+
+                window.location.href = "index.html";
+
+            } else {
+
+                alert(data.message);
+
+            }
+
+        } catch (error) {
+
+            console.error("Login error:", error);
+
+            alert(
+                "Cannot connect to the backend. Make sure Flask is running."
             );
-
-            alert("Login successful!");
-
-            window.location.href = "index.html";
-
-        } else {
-
-            alert("Invalid email or password!");
-
         }
 
     });
@@ -100,39 +136,67 @@ const lostForm = document.getElementById("lostForm");
 
 if (lostForm) {
 
-    lostForm.addEventListener("submit", function(event) {
+    lostForm.addEventListener("submit", async function(event) {
 
         event.preventDefault();
 
         const item = {
 
-            id: Date.now(),
+            title:
+                document.getElementById("lostItemName").value.trim(),
 
-            type: "lost",
+            description:
+                document.getElementById("lostDescription").value.trim(),
 
-            name: document.getElementById("lostItemName").value.trim(),
+            location:
+                document.getElementById("lostLocation").value.trim(),
 
-            description: document.getElementById("lostDescription").value.trim(),
+            date:
+                document.getElementById("lostDate").value,
 
-            location: document.getElementById("lostLocation").value.trim(),
+            type: "Lost",
 
-            date: document.getElementById("lostDate").value,
-
-            contact: document.getElementById("lostContact").value.trim()
-
+            category: "Other"
         };
 
-        let items = JSON.parse(localStorage.getItem("items")) || [];
+        try {
 
-        items.push(item);
+            const response = await fetch(`${API_URL}/items`, {
 
-        localStorage.setItem("items", JSON.stringify(items));
+                method: "POST",
 
-        alert("Lost item reported successfully!");
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-        lostForm.reset();
+                body: JSON.stringify(item)
 
-        window.location.href = "items.html";
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+
+                alert("Lost item reported successfully!");
+
+                lostForm.reset();
+
+                window.location.href = "items.html";
+
+            } else {
+
+                alert(data.message);
+
+            }
+
+        } catch (error) {
+
+            console.error("Lost item error:", error);
+
+            alert(
+                "Cannot connect to the backend. Make sure Flask is running."
+            );
+        }
 
     });
 
@@ -145,39 +209,67 @@ const foundForm = document.getElementById("foundForm");
 
 if (foundForm) {
 
-    foundForm.addEventListener("submit", function(event) {
+    foundForm.addEventListener("submit", async function(event) {
 
         event.preventDefault();
 
         const item = {
 
-            id: Date.now(),
+            title:
+                document.getElementById("foundItemName").value.trim(),
 
-            type: "found",
+            description:
+                document.getElementById("foundDescription").value.trim(),
 
-            name: document.getElementById("foundItemName").value.trim(),
+            location:
+                document.getElementById("foundLocation").value.trim(),
 
-            description: document.getElementById("foundDescription").value.trim(),
+            date:
+                document.getElementById("foundDate").value,
 
-            location: document.getElementById("foundLocation").value.trim(),
+            type: "Found",
 
-            date: document.getElementById("foundDate").value,
-
-            contact: document.getElementById("foundContact").value.trim()
-
+            category: "Other"
         };
 
-        let items = JSON.parse(localStorage.getItem("items")) || [];
+        try {
 
-        items.push(item);
+            const response = await fetch(`${API_URL}/items`, {
 
-        localStorage.setItem("items", JSON.stringify(items));
+                method: "POST",
 
-        alert("Found item reported successfully!");
+                headers: {
+                    "Content-Type": "application/json"
+                },
 
-        foundForm.reset();
+                body: JSON.stringify(item)
 
-        window.location.href = "items.html";
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+
+                alert("Found item reported successfully!");
+
+                foundForm.reset();
+
+                window.location.href = "items.html";
+
+            } else {
+
+                alert(data.message);
+
+            }
+
+        } catch (error) {
+
+            console.error("Found item error:", error);
+
+            alert(
+                "Cannot connect to the backend. Make sure Flask is running."
+            );
+        }
 
     });
 
@@ -186,105 +278,144 @@ if (foundForm) {
 
 // ================= DISPLAY ITEMS =================
 
-function displayItems(filterType = "all") {
+async function displayItems(filterType = "all") {
 
-    const container = document.getElementById("itemsContainer");
+    const container =
+        document.getElementById("itemsContainer");
 
     if (!container) {
         return;
     }
 
-    let items = JSON.parse(localStorage.getItem("items")) || [];
+    try {
 
-    if (filterType !== "all") {
+        const response =
+            await fetch(`${API_URL}/items`);
 
-        items = items.filter(function(item) {
+        const items = await response.json();
 
-            return item.type === filterType;
+        let filteredItems = items;
+
+        if (filterType !== "all") {
+
+            filteredItems = items.filter(function(item) {
+
+                return item.type.toLowerCase() === filterType;
+
+            });
+
+        }
+
+        if (filteredItems.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty-message">
+
+                    <h2>
+                        No ${filterType === "all" ? "" : filterType}
+                        items available.
+                    </h2>
+
+                    <p>
+                        Be the first person to report an item.
+                    </p>
+
+                </div>
+            `;
+
+            return;
+        }
+
+        container.innerHTML = "";
+
+        filteredItems.forEach(function(item) {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "item-card " +
+                item.type.toLowerCase();
+
+            const statusClass =
+                item.type.toLowerCase() === "lost"
+                    ? "lost-status"
+                    : "found-status";
+
+            const statusText =
+                item.type.toLowerCase() === "lost"
+                    ? "LOST"
+                    : "FOUND";
+
+            card.innerHTML = `
+
+                <h2>
+                    ${escapeHTML(item.title)}
+                </h2>
+
+                <p>
+                    <span class="status ${statusClass}">
+                        ${statusText}
+                    </span>
+                </p>
+
+                <p>
+                    <strong>Description:</strong>
+                    ${escapeHTML(item.description || "")}
+                </p>
+
+                <p>
+                    <strong>Location:</strong>
+                    ${escapeHTML(item.location || "")}
+                </p>
+
+                <p>
+                    <strong>Date:</strong>
+                    ${escapeHTML(item.date || "")}
+                </p>
+
+            `;
+
+            container.appendChild(card);
 
         });
 
-    }
+    } catch (error) {
 
-    if (items.length === 0) {
+        console.error("Error loading items:", error);
 
         container.innerHTML = `
             <div class="empty-message">
-                <h2>No ${filterType === "all" ? "" : filterType} items available.</h2>
-                <p>Be the first person to report an item.</p>
+                <h2>Unable to load items</h2>
+                <p>
+                    Make sure the Flask backend is running.
+                </p>
             </div>
         `;
-
-        return;
     }
-
-    container.innerHTML = "";
-
-    items.forEach(function(item) {
-
-        const card = document.createElement("div");
-
-        card.className = "item-card " + item.type;
-
-        const statusClass =
-            item.type === "lost"
-                ? "lost-status"
-                : "found-status";
-
-        const statusText =
-            item.type === "lost"
-                ? "LOST"
-                : "FOUND";
-
-        card.innerHTML = `
-            <h2>${escapeHTML(item.name)}</h2>
-
-            <p>
-                <span class="status ${statusClass}">
-                    ${statusText}
-                </span>
-            </p>
-
-            <p>
-                <strong>Description:</strong>
-                ${escapeHTML(item.description)}
-            </p>
-
-            <p>
-                <strong>Location:</strong>
-                ${escapeHTML(item.location)}
-            </p>
-
-            <p>
-                <strong>Date:</strong>
-                ${escapeHTML(item.date)}
-            </p>
-
-            <p>
-                <strong>Contact:</strong>
-                ${escapeHTML(item.contact)}
-            </p>
-        `;
-
-        container.appendChild(card);
-
-    });
-
 }
 
 
 // ================= FILTER BUTTONS =================
 
 function showLostItems() {
+
     displayItems("lost");
+
 }
+
 
 function showFoundItems() {
+
     displayItems("found");
+
 }
 
+
 function showAllItems() {
+
     displayItems("all");
+
 }
 
 
@@ -292,7 +423,8 @@ function showAllItems() {
 
 function escapeHTML(value) {
 
-    const div = document.createElement("div");
+    const div =
+        document.createElement("div");
 
     div.textContent = value;
 
@@ -303,13 +435,18 @@ function escapeHTML(value) {
 
 // ================= LOAD ITEMS PAGE =================
 
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
 
-    const container = document.getElementById("itemsContainer");
+        const container =
+            document.getElementById("itemsContainer");
 
-    if (container) {
-        displayItems();
+        if (container) {
+
+            displayItems();
+
+        }
+
     }
-
-});
-
+);
