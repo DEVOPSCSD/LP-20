@@ -19,8 +19,4 @@ def home():
 
 if __name__ == "__main__":
     init_db()
-<<<<<<< HEAD
-    app.run(debug=True)
-=======
-    app.run(debug=True)
->>>>>>> 381f6def5da9f70cbbb29e65632f04e87c4b6e84
+    app.run(host="0.0.0.0", port=5000, debug=True)
